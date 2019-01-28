@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="eLearningModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="UserActivity">
+          <Key>
+            <PropertyRef Name="userActivityID" />
+          </Key>
+          <Property Name="userActivityID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userID" Type="int" Nullable="false" />
+          <Property Name="activityID" Type="int" />
+          <Property Name="desc" Type="varchar" MaxLength="2000" />
+          <Property Name="activityDataTime" Type="datetime" />
+          <Property Name="createdBy" Type="int" />
+          <Property Name="createdDate" Type="datetime" />
+          <Property Name="modifiedBy" Type="int" />
+          <Property Name="modifiedDate" Type="datetime" />
+          <Property Name="sectionID" Type="int" />
+          <Property Name="newsID" Type="int" />
+          <Property Name="hostName" Type="varchar" MaxLength="50" />
+          <Property Name="remoteAddr" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="UserAlert">
+          <Key>
+            <PropertyRef Name="userAlertID" />
+          </Key>
+          <Property Name="userAlertID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="alertID" Type="int" Nullable="false" />
+          <Property Name="userID" Type="int" Nullable="false" />
+          <Property Name="userActivityID" Type="int" />
+          <Property Name="desc" Type="varchar" MaxLength="2000" />
+          <Property Name="alertDate" Type="datetime" />
+          <Property Name="status" Type="char" MaxLength="1" />
+          <Property Name="createdBy" Type="int" />
+          <Property Name="createdDate" Type="datetime" />
+          <Property Name="modifiedBy" Type="int" />
+          <Property Name="modifiedDate" Type="datetime" />
+          <Property Name="sectionID" Type="int" />
+        </EntityType>
+        <EntityContainer Name="eLearningModelStoreContainer">
+          <EntitySet Name="UserActivity" EntityType="Self.UserActivity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserAlert" EntityType="Self.UserAlert" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="eLearningModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="UserActivity">
+          <Key>
+            <PropertyRef Name="userActivityID" />
+          </Key>
+          <Property Name="userActivityID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userID" Type="Int32" Nullable="false" />
+          <Property Name="activityID" Type="Int32" />
+          <Property Name="desc" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="activityDataTime" Type="DateTime" Precision="3" />
+          <Property Name="sectionID" Type="Int32" />
+          <Property Name="newsID" Type="Int32" />
+          <Property Name="hostName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="remoteAddr" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="UserAlert" />
+        </EntityType>
+        <EntityType Name="UserAlert">
+          <Key>
+            <PropertyRef Name="userAlertID" />
+          </Key>
+          <Property Name="userAlertID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="alertID" Type="Int32" Nullable="false" />
+          <Property Name="userID" Type="Int32" Nullable="false" />
+          <Property Name="userActivityID" Type="Int32" />
+          <Property Name="desc" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="alertDate" Type="DateTime" Precision="3" />
+          <Property Name="status" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="sectionID" Type="Int32" />
+          <NavigationProperty Name="UserActivity" Relationship="eLearningModel.UserAlertUserActivity" FromRole="UserAlert" ToRole="UserActivity" />
+        </EntityType>
+        <EntityContainer Name="eLearningEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="UserActivities" EntityType="Self.UserActivity" />
+          <EntitySet Name="UserAlerts" EntityType="Self.UserAlert" />
+          <AssociationSet Name="UserAlertUserActivity" Association="eLearningModel.UserAlertUserActivity">
+            <End Role="UserAlert" EntitySet="UserAlerts" />
+            <End Role="UserActivity" EntitySet="UserActivities" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="UserAlertUserActivity">
+          <End Type="eLearningModel.UserAlert" Role="UserAlert" Multiplicity="0..1" />
+          <End Type="eLearningModel.UserActivity" Role="UserActivity" Multiplicity="0..1" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eLearningModelStoreContainer" CdmEntityContainer="eLearningEntities">
+          <EntitySetMapping Name="UserActivities">
+            <EntityTypeMapping TypeName="eLearningModel.UserActivity">
+              <MappingFragment StoreEntitySet="UserActivity">
+                <ScalarProperty Name="userActivityID" ColumnName="userActivityID" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="activityID" ColumnName="activityID" />
+                <ScalarProperty Name="desc" ColumnName="desc" />
+                <ScalarProperty Name="activityDataTime" ColumnName="activityDataTime" />
+                <ScalarProperty Name="sectionID" ColumnName="sectionID" />
+                <ScalarProperty Name="newsID" ColumnName="newsID" />
+                <ScalarProperty Name="hostName" ColumnName="hostName" />
+                <ScalarProperty Name="remoteAddr" ColumnName="remoteAddr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAlerts">
+            <EntityTypeMapping TypeName="eLearningModel.UserAlert">
+              <MappingFragment StoreEntitySet="UserAlert">
+                <ScalarProperty Name="userAlertID" ColumnName="userAlertID" />
+                <ScalarProperty Name="alertID" ColumnName="alertID" />
+                <ScalarProperty Name="userID" ColumnName="userID" />
+                <ScalarProperty Name="userActivityID" ColumnName="userActivityID" />
+                <ScalarProperty Name="desc" ColumnName="desc" />
+                <ScalarProperty Name="alertDate" ColumnName="alertDate" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="sectionID" ColumnName="sectionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
